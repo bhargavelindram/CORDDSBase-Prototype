@@ -92,7 +92,7 @@ function initOperator(){if(!S.room){S.room=randomRoom();$('roomDisplay').textCon
 peer.on('open',id=>{if(S.peer!==peer)return;$('roomDisplay').textContent=id+' · READY';$('systemStatus').textContent='Operator online';$('dot').classList.add('on')});
 peer.on('call',call=>{call.answer();call.on('stream',stream=>{S.calls.set(call.peer,stream);renderCameras();startRecording(call.peer,stream)});call.on('close',()=>{S.calls.delete(call.peer);renderCameras()});call.on('error',e=>console.error('Media error',e))});
 peer.on('connection',conn=>{conn.on('data',data=>{if(data&&data.type==='location')showLocation(data)})});
-peer.on('error',err=>{console.error('PeerJS operator error',err);$('systemStatus').textContent='Connection error: '+(err.type||'unknown');$('roomDisplay').textContent=room+' · ERROR';});
+peer.on('error',err=>{console.error('PeerJS operator error',err);if(err.type==='unavailable-id'){$('systemStatus').textContent='Room busy — generating a new room...';$('roomDisplay').textContent=room+' · RETRYING';try{peer.destroy()}catch(e){}setTimeout(()=>{if(S.role==='operator'){S.room=randomRoom();$('roomDisplay').textContent=S.room+' · CONNECTING';initOperator()}},800)}else{$('systemStatus').textContent='Connection error: '+(err.type||'unknown');$('roomDisplay').textContent=room+' · ERROR';}});
 peer.on('disconnected',()=>{$('systemStatus').textContent='Disconnected';});
 }
 async function startCamera(){const room=$('cameraRoom').value.trim().toLowerCase();if(!/^cb-[a-z0-9]{5}$/.test(room)){$('cameraError').textContent='Room ID must look like cb-xxxxx.';return}if(!window.Peer){$('cameraError').textContent='Connection library failed to load. Refresh the page.';return}

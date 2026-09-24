@@ -88,11 +88,11 @@ function enterApp(role){$('gate').classList.add('hidden');$('app').classList.rem
 function page(name){document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));$(name).classList.remove('hidden');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));$('pageTitle').textContent=name==='map'?'Live Map':name==='storage'?'Video Storage':name[0].toUpperCase()+name.slice(1);if(name==='storage')loadVideos()}
 function randomRoom(){const chars='abcdefghijklmnopqrstuvwxyz0123456789';let s='';for(let i=0;i<5;i++)s+=chars[Math.floor(Math.random()*chars.length)];return 'cb-'+s}
 function makeRoom(){if(S.peer){try{S.peer.destroy()}catch(e){}S.peer=null}S.room=null;$('roomDisplay').textContent='CONNECTING';initOperator()}
-function initOperator(){if(S.peer){try{S.peer.destroy()}catch(e){}S.peer=null}const peer=new Peer({debug:1});S.peer=peer;
+function initOperator(){if(S.peer){try{S.peer.destroy()}catch(e){}S.peer=null}const peer=new Peer({host:'0.peerjs.com',port:443,path:'/',secure:true,debug:3,config:{iceServers:[{urls:'stun:stun.l.google.com:19302'}]}});S.peer=peer;
 peer.on('open',id=>{if(S.peer!==peer)return;S.room=id;$('roomDisplay').textContent=id+' · READY';$('systemStatus').textContent='Operator online';$('dot').classList.add('on')});
 peer.on('call',call=>{call.answer();call.on('stream',stream=>{S.calls.set(call.peer,stream);renderCameras();startRecording(call.peer,stream)});call.on('close',()=>{S.calls.delete(call.peer);renderCameras()});call.on('error',e=>console.error('Media error',e))});
 peer.on('connection',conn=>{conn.on('data',data=>{if(data&&data.type==='location')showLocation(data)})});
-peer.on('error',err=>{console.error('PeerJS operator error',err);$('systemStatus').textContent='Connection error: '+(err.type||'unknown');$('roomDisplay').textContent='ERROR · '+(err.type||'unknown')});
+peer.on('error',err=>{console.error('PeerJS operator error',err);const t=err&&err.type||'unknown';const m=err&&err.message||'';$('systemStatus').textContent='Connection error: '+t; $('roomDisplay').textContent='ERROR · '+t; $('loginError').textContent='PeerJS: '+t+(m?' — '+m:'')});
 peer.on('disconnected',()=>{$('systemStatus').textContent='Disconnected';});
 }
 async function startCamera(){const room=$('cameraRoom').value.trim();if(!room){$('cameraError').textContent='Enter the room ID shown on the operator computer.';return}if(!window.Peer){$('cameraError').textContent='Connection library failed to load. Refresh the page.';return}

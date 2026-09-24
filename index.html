@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000">
 <title>CORDDSBase</title>
+<meta name="corddsbase-build" content="livekit-settings-2026-09-24">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 *{box-sizing:border-box}html,body{margin:0;background:#050505;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}button,input{font:inherit}button{cursor:pointer}button:active{transform:translateY(1px)}.hidden{display:none!important}.muted{color:#888}.red{color:#ff2020}.error{color:#ff4b4b;font-size:13px;margin-top:10px}
@@ -50,7 +51,7 @@
 <section id="map" class="page hidden"><div class="card"><b>Live Map</b><p class="muted">Camera GPS is sent through LiveKit data messages.</p><div class="maptools"><input id="mapSearch" placeholder="Search India or a location..."><button class="btn secondary" onclick="searchMap()">Search</button><button class="btn secondary" onclick="locateCamera()">Center on Camera</button></div><div class="map"><div id="leafletMap" class="leafletmap"></div></div><p class="muted" id="coords">No camera location received.</p><div id="hospitalResult" class="hospital hidden"></div></div></section>
 <section id="alerts" class="page hidden"><div class="card"><b>Alerts</b><p class="muted">No detection engine is running yet. This page is ready for YOLOv11 ≥30% confidence alerts.</p></div></section>
 <section id="storage" class="page hidden"><div class="card"><div class="row" style="justify-content:space-between"><div><b>Video Storage</b><div class="muted">Two-minute clips are retained locally until deleted.</div></div><button class="btn secondary" onclick="loadVideos()">Refresh</button></div><table><thead><tr><th>Camera</th><th>Started</th><th>Length</th><th>Size</th><th>Action</th></tr></thead><tbody id="videoRows"></tbody></table></div></section>
-<section id="settings" class="page hidden"><div class="card"><b>LiveKit setup</b><p class="muted">For this prototype, LiveKit Cloud's development token server is used. Paste only the <b>Token Server ID</b>, never an API secret.</p><div class="setup"><div class="field"><label>Development Token Server ID</label><input id="tokenServerId" placeholder="token-server-xxxxxx"></div><div class="row"><button class="btn primary" onclick="saveTokenServer()">Save</button><button class="btn secondary" onclick="testLiveKit()">Test connection</button></div><div id="settingsStatus" class="error"></div></div></div></section>
+<section id="settings" class="page hidden"><div class="card"><b>LiveKit setup</b><p class="muted">For this prototype, LiveKit Cloud's development token server is used. Paste only the <b>Token Server ID</b>, never an API secret. This setting is saved only in this browser.</p><div class="setup"><div class="field"><label>Development Token Server ID</label><input id="tokenServerId" placeholder="token-server-xxxxxx"></div><div class="row"><button class="btn primary" onclick="saveTokenServer()">Save</button><button class="btn secondary" onclick="testLiveKit()">Test connection</button></div><div id="settingsStatus" class="error"></div></div></div></section>
 </div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
